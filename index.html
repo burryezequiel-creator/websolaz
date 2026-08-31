@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solaz entre flores</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf8f5; 
+            --header-bg: #ffffff;
+            --card-bg: #ffffff;
+            --text-main: #332b2b; 
+            --text-muted: #7a6c6c;
+            --primary: #a87b83; 
+            --primary-hover: #8c636a;
+            --accent: #e3d3c8; 
+            --border-light: #eae0d5;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            text-align: center;
+            padding: 4rem 1rem 3rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin: 0;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin: 10px 0;
+            font-weight: 300;
+        }
+
+        header a {
+            color: var(--text-main);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border-light);
+            transition: color 0.3s;
+        }
+
+        header a:hover {
+            color: var(--primary);
+        }
+
+        .international-banner {
+            display: inline-block;
+            background-color: transparent;
+            color: var(--primary);
+            padding: 8px 20px;
+            border: 1px solid var(--primary);
+            margin-top: 20px;
+            font-size: 0.85rem;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 1.2rem;
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-light);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 5px 10px;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        main { max-width: 1200px; margin: 3rem auto; padding: 0 1rem; }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--text-main);
+            margin: 4rem 0 2.5rem 0;
+            font-weight: 400;
+        }
+
+        .catalog {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        /* --- NUEVO: ESTILOS PARA CARRUSEL DE PRODUCTOS (ADICIONALES) --- */
+        .product-carousel {
+            display: flex;
+            overflow-x: auto;
+            gap: 2rem;
+            padding-bottom: 2rem;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .product-carousel::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .product-carousel::-webkit-scrollbar-track {
+            background: var(--bg-color);
+            border-radius: 4px;
+        }
+        
+        .product-carousel::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .product-carousel .card {
+            min-width: 300px;
+            scroll-snap-align: start;
+            flex: 0 0 auto;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .carousel-container {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+            background-color: var(--bg-color);
+        }
+
+        .carousel-images {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-images img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            flex-shrink: 0;
+            cursor: zoom-in;
+            transition: opacity 0.3s;
+        }
+
+        .carousel-images img:hover {
+            opacity: 0.9;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--text-main);
+            border: none;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 20;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .carousel-btn:hover { background-color: var(--primary); color: #fff; }
+        .btn-prev { left: 0; }
+        .btn-next { right: 0; }
+
+        .card-content { 
+            padding: 2rem; 
+            display: flex; 
+            flex-direction: column; 
+            flex-grow: 1; 
+            text-align: center;
+        }
+        
+        .card-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 1.5rem; 
+            margin: 0 0 1rem 0; 
+            color: var(--text-main);
+            font-weight: 600;
+        }
+        
+        .card-desc { 
+            font-size: 0.9rem; 
+            color: var(--text-muted);
+            margin-bottom: 2rem; 
+            flex-grow: 1; 
+        }
+        
+        .card-footer { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 15px; 
+            margin-top: auto; 
+        }
+        
+        .price { 
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem; 
+            color: var(--primary);
+            font-style: italic;
+        }
+        
+        .btn-buy {
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-buy:hover { background-color: var(--primary-hover); }
+
+        .input-precio {
+            padding: 0.8rem;
+            border: 1px solid var(--border-light);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            width: 100%;
+            box-sizing: border-box;
+            outline: none;
+            text-align: center;
+            background-color: var(--bg-color);
+        }
+        
+        .input-precio:focus { border-color: var(--primary); }
+        .footer-regalo { width: 100%; }
+        .no-price .card-footer { display: none; }
+
+        footer { 
+            text-align: center; 
+            padding: 3rem 1rem; 
+            background-color: var(--header-bg); 
+            border-top: 1px solid var(--border-light);
+            margin-top: 4rem; 
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0,0,0,0.85); 
+            backdrop-filter: blur(4px); 
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 4px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            animation: zoomIn 0.3s ease;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: color 0.3s;
+            font-family: sans-serif;
+        }
+
+        .close-modal:hover,
+        .close-modal:focus {
+            color: var(--primary);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.95); }
+            to { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Solaz entre flores</h1>
+        <p>64 nro 1030 entre 64 y 65, La Plata</p>
+        <p><a href="https://www.instagram.com/solazentreflores/" target="_blank">Instagram: @solazentreflores</a></p>
+        <div class="international-banner">
+            Acortamos distancias: Realizá tu pedido desde Brasil, Ecuador, Alemania o cualquier parte del mundo para sorprender a tus seres queridos.
+        </div>
+    </header>
+
+    <nav>
+        <a href="#preventa-primavera" style="color: var(--primary); font-weight: 500;">Preventa Primavera</a>
+        <a href="#ramos-personalizados">Ramos Personalizados</a>
+        <a href="#centros-mesas">Centros de Mesas</a>
+        <a href="#ramos-novias">Ramos de Novias</a>
+        <a href="#condolencias">Condolencias</a>
+        <a href="#regalos">Regalos</a>
+        <a href="#adicionales">Adicionales</a>
+        <a href="#nosotros">Nosotros</a>
+        <a href="#clientes">Clientes</a>
+    </nav>
+
+    <main>
+        <h2 id="preventa-primavera" class="section-title">Preventa Especial Primavera</h2>
+        <div class="catalog">
+            <article class="card">
+                <div class="carousel-container">
+                    <div class="carousel-images" id="slider-primavera1" data-index="0">
+                        <img src="primavera1.jpg" alt="Ramo Romantica" loading="lazy" onclick="abrirModal(this.src)">
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Ramo Romántica</h3>
+                    <p class="card-desc">Colores vibrantes para recibir la estación más linda del año. Combinación de 6 rosas nacionales más flores de estación amarillas y blancas.</p>
+                    <div class="card-footer">
+                        <span class="price">$45.000</span>
+                        <button class="btn-buy" onclick="comprar('Preventa Primavera: Ramo Renacer')">Reservar</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="carousel-container">
+                    <div class="carousel-images" id="slider-primavera2" data-index="0">
+                        <img src="primavera2.jpg" alt="Frescura de Septiembre" loading="lazy" onclick="abrirModal(this.src)">
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Frescura de Septiembre</h3>
+                    <p class="card-desc">Combinación de 12 rosas importadas amarillas con delicado follaje y envoltura en papel coreano.</p>
+                    <div class="card-footer">
+                        <span class="price">$90.000</span>
+                        <button class="btn-buy" onclick="comprar('Preventa Primavera: Frescura de Septiembre')">Reservar</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="carousel-container">
+                    <div class="carousel-images" id="slider-primavera3" data-index="0">
+                        <img src="primavera3.jpg" alt="Brisa Floral" loading="lazy" onclick="abrirModal(this.src)">
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Brisa Floral</h3>
+                    <p class="card-desc">8 elegantes rosas amarillas importadas, presentadas con follaje de temporada.</p>
+                    <div class="card-footer">
+                        <span class="price">$55.000</span>
+                        <button class="btn-buy" onclick="comprar('Preventa Primavera: Brisa Floral')">Reservar</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="carousel-container">
+                    <div class="carousel-images" id="slider-primavera4" data-index="0">
+                        <img src="primavera4.jpg" alt="Aroma de Campo" loading="lazy" onclick="abrirModal(this.src)">
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Aroma de Campo</h3>
+                    <p class="card-desc">Estilo rústico y romántico. Abundante ramo de 10 girasoles con follaje.</p>
+                    <div class="card-footer">
+                        <span class="price">$120.000</span>
+                        <button class="btn-buy" onclick="comprar('Preventa Primavera: Aroma de Campo')">Reservar</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="carousel-container">
+                    <div class="carousel-images" id="slider-primavera5" data-index="0">
+                        <img src="primavera5.jpg" alt="Ramo Primaveral" loading="lazy" onclick="abrirModal(this.src)">
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Ramo Primaveral</h3>
+                    <p class="card-desc">Hermoso ramo con mix de flores de estación, coronado con una flor principal destacada.</p>
+                    <div class="card-footer">
+                        <span class="price">$30.000</span>
+                        <button class="btn-buy" onclick="comprar('Preventa Primavera: Caja Primaveral')">Reservar</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <h2 id="ramos-personalizados" class="section-title">Ramos Personalizados</h2>
+        <div class="catalog">
+            <article class="card">
+                <div class="carousel-container">
+                    <div class="carousel-images" id="slider-personalizado1" data-index="0">
+                        <img src="personalizado1.jpg" alt="Ramo 1" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="personalizado2.jpg" alt="Ramo 2" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="personalizado3.jpg" alt="Ramo 3" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="personalizado4.jpg" alt="Ramo 4" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="personalizado5.jpg" alt="Ramo 5" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="personalizado6.jpg" alt="Ramo 6" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="personalizado7.jpg" alt="Ramo 7" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="personalizado8.jpg" alt="Ramo 8" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="personalizado9.jpg" alt="Ramo 9" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="personalizado10.jpg" alt="Ramo 10" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="personalizado11.jpg" alt="Ramo 11" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="personalizado12.jpg" alt="Ramo 12" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="personalizado13.jpg" alt="Ramo 13" loading="lazy" onclick="abrirModal(this.src)">
+                    </div>
+                    <button class="carousel-btn btn-prev" onclick="moverCarrusel('slider-personalizado1', -1)">❮</button>
+                    <button class="carousel-btn btn-next" onclick="moverCarrusel('slider-personalizado1', 1)">❯</button>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Amanecer Pastel</h3>
+                    <p class="card-desc">Un arreglo botánico exclusivo, diseñado con tus flores favoritas en una paleta de tonos suaves y elegantes.</p>
+                    <div class="card-footer">
+                        <span class="price">Desde $25.000</span>
+                        <button class="btn-buy" onclick="comprar('Ramo Personalizado: Amanecer Pastel')">Solicitar Diseño</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <h2 id="centros-mesas" class="section-title">Centros de Mesas</h2>
+        <div class="catalog">
+            <article class="card">
+                <div class="carousel-container">
+                    <div class="carousel-images" id="slider-centro1" data-index="0">
+                        <img src="centro1.jpg" alt="Centro 1" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="centro2.jpg" alt="Centro 2" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="centro3.jpg" alt="Centro 3" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="centro4.jpg" alt="Centro 4" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="centro5.jpg" alt="Centro 5" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="centro6.jpg" alt="Centro 6" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="centro7.jpg" alt="Centro 7" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="centro8.jpg" alt="Centro 8" loading="lazy" onclick="abrirModal(this.src)">
+                    </div>
+                    <button class="carousel-btn btn-prev" onclick="moverCarrusel('slider-centro1', -1)">❮</button>
+                    <button class="carousel-btn btn-next" onclick="moverCarrusel('slider-centro1', 1)">❯</button>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Elegancia Porteña</h3>
+                    <p class="card-desc">Composición floral sobria y delicada, ideal para elevar el ambiente de tus cenas y eventos especiales.</p>
+                    <div class="card-footer">
+                        <span class="price">Desde $10.000</span>
+                        <button class="btn-buy" onclick="comprar('Centro de Mesa: Elegancia Porteña')">Comprar</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <h2 id="ramos-novias" class="section-title">Colección Nupcial</h2>
+        <div class="catalog">
+            <article class="card">
+                <div class="carousel-container">
+                    <div class="carousel-images" id="slider-novia1" data-index="0">
+                        <img src="novia1.jpg" alt="Novia 1" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="novia2.jpg" alt="Novia 2" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="novia3.jpg" alt="Novia 3" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="novia4.jpg" alt="Novia 4" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="novia5.jpg" alt="Novia 5" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="novia6.jpg" alt="Novia 6" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="novia7.jpg" alt="Novia 7" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="novia8.jpg" alt="Novia 8" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="novia9.jpg" alt="Novia 9" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="novia10.jpg" alt="Novia 10" loading="lazy" onclick="abrirModal(this.src)">
+                    </div>
+                    <button class="carousel-btn btn-prev" onclick="moverCarrusel('slider-novia1', -1)">❮</button>
+                    <button class="carousel-btn btn-next" onclick="moverCarrusel('slider-novia1', 1)">❯</button>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Sueño Romántico</h3>
+                    <p class="card-desc">Acompañamos tu gran día con diseño botánico inolvidable, confeccionado a medida para reflejar tu estilo.</p>
+                    <div class="card-footer">
+                        <span class="price">Desde $70.000</span>
+                        <button class="btn-buy" onclick="comprar('Ramo de Novia: Sueño Romántico')">Agendar Consulta</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <h2 id="condolencias" class="section-title">Arreglos de Condolencias</h2>
+        <div class="catalog">
+            <article class="card">
+                <div class="carousel-container">
+                    <div class="carousel-images" id="slider-condolencia1" data-index="0">
+                        <img src="condolencia1.jpg" alt="Condolencia 1" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="condolencia2.jpg" alt="Condolencia 2" loading="lazy" onclick="abrirModal(this.src)">
+ 			<img src="condolencia3.jpg" alt="Condolencia 3" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="condolencia4.jpg" alt="Condolencia 4" loading="lazy" onclick="abrirModal(this.src)">
+                    </div>
+                    <button class="carousel-btn btn-prev" onclick="moverCarrusel('slider-condolencia1', -1)">❮</button>
+                    <button class="carousel-btn btn-next" onclick="moverCarrusel('slider-condolencia1', 1)">❯</button>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Memoria Eterna</h3>
+                    <p class="card-desc">Un homenaje sereno y respetuoso, elaborado para acompañar con sensibilidad en los momentos más difíciles.</p>
+                    <div class="card-footer">
+                        <span class="price">Desde $50.000</span>
+                        <button class="btn-buy" onclick="comprar('Arreglo de Condolencia: Memoria Eterna')">Comprar</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <h2 id="regalos" class="section-title">Regalos a Medida</h2>
+        <div class="catalog">
+            <article class="card">
+                <div class="carousel-container">
+                    <div class="carousel-images" id="slider-regalo1" data-index="0">
+                        <img src="regalo1.jpg" alt="Regalo 1" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="regalo2.jpg" alt="Regalo 2" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="regalo3.jpg" alt="Regalo 3" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="regalo4.jpg" alt="Regalo 4" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="regalo5.jpg" alt="Regalo 5" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="regalo6.jpg" alt="Regalo 6" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="regalo7.jpg" alt="Regalo 7" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="regalo8.jpg" alt="Regalo 8" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="regalo9.jpg" alt="Regalo 9" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="regalo10.jpg" alt="Regalo 10" loading="lazy" onclick="abrirModal(this.src)">
+                    </div>
+                    <button class="carousel-btn btn-prev" onclick="moverCarrusel('slider-regalo1', -1)">❮</button>
+                    <button class="carousel-btn btn-next" onclick="moverCarrusel('slider-regalo1', 1)">❯</button>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Caja Sorpresa Solaz</h3>
+                    <p class="card-desc">Curamos una selección floral especial adaptada a tu presupuesto. Indícanos el valor y nos encargamos del diseño.</p>
+                    <div class="card-footer footer-regalo">
+                        <input type="number" id="presupuesto-cliente" class="input-precio" placeholder="Ej: 15000">
+                        <button class="btn-buy" onclick="sugerirPrecio('Caja Sorpresa Solaz', 'presupuesto-cliente')">Proponer Presupuesto</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <!-- NUEVA SECCIÓN: ADICIONALES (CARRUSEL HORIZONTAL) -->
+        <h2 id="adicionales" class="section-title">Adicionales</h2>
+        <div class="product-carousel">
+            <!-- 20 Artículos generados para los adicionales -->
+            <script>
+    // 1. Define aquí los datos exactos de tus 20 (o más) adicionales
+    const listaAdicionales = [
+        { img: "adicional1.jpg", nombre: "Oso de peluche corazon te quiero", precio: "$25.000" },
+        { img: "adicional2.jpg", nombre: "Oso de Peluche panda Chico", precio: "$25.000" },
+        { img: "adicional3.jpg", nombre: "Panza con Corazón", precio: "$35.000" },
+        { img: "adicional4.jpg", nombre: "Carpincho con mate", precio: "$30.000" },
+        { img: "adicional5.jpg", nombre: "Peluche chanchito rosa", precio: "$25.000" },
+        { img: "adicional6.jpg", nombre: "Erizo con corazon", precio: "$25.000" },
+        { img: "adicional7.jpg", nombre: "Block 300", precio: "$30.000" },
+        { img: "adicional8.jpg", nombre: "Block 170", precio: "$18.000" },
+        { img: "adicional9.jpg", nombre: "Ferrero x4", precio: "$15.000" },
+        { img: "adicional10.jpg", nombre: "Ferrero x8", precio: "$25.000" },
+        { img: "adicional11.jpg", nombre: "marrocx1", precio: "2.000" },
+        { img: "adicional12.jpg", nombre: "medallon de menta", precio: "$1.500" },
+        { img: "adicional13.jpg", nombre: "Cabsha", precio: "$2.000" },
+        { img: "adicional14.jpg", nombre: "Toblerone 100grs", precio: "$22.000" },
+        { img: "adicional15.jpg", nombre: "Adicional 15", precio: "$5.000" },
+        { img: "adicional16.jpg", nombre: "Adicional 16", precio: "$5.000" },
+        { img: "adicional17.jpg", nombre: "Adicional 17", precio: "$5.000" },
+        { img: "adicional18.jpg", nombre: "Adicional 18", precio: "$5.000" },
+        { img: "adicional19.jpg", nombre: "Adicional 19", precio: "$5.000" },
+        { img: "adicional20.jpg", nombre: "Adicional 20", precio: "$5.000" }
+    ];
+
+    // 2. El código dibuja automáticamente las tarjetas basándose en tu lista
+    const adicionalesContainer = document.querySelector('.product-carousel');
+    const fragment = document.createDocumentFragment();
+    
+    listaAdicionales.forEach(item => {
+        const article = document.createElement('article');
+        article.className = 'card';
+        article.innerHTML = `
+            <div class="carousel-container">
+                <div class="carousel-images">
+                    <img src="${item.img}" alt="${item.nombre}" loading="lazy" onclick="abrirModal(this.src)">
+                </div>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">${item.nombre}</h3>
+                <p class="card-desc">Detalle especial para acompañar y elevar tu arreglo botánico principal.</p>
+                <div class="card-footer">
+                    <span class="price">${item.precio}</span>
+                    <button class="btn-buy" onclick="comprar('Adicional: ${item.nombre}')">Agregar</button>
+                </div>
+            </div>
+        `;
+        fragment.appendChild(article);
+    });
+    adicionalesContainer.appendChild(fragment);
+</script>
+             </div>
+
+        <h2 id="nosotros" class="section-title">Nuestra Historia</h2>
+        <div class="catalog no-price">
+            <article class="card">
+                <div class="carousel-container">
+                    <div class="carousel-images" id="slider-nosotros" data-index="0">
+                        <img src="nosotros1.jpg" alt="Nosotros 1" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="nosotros2.jpg" alt="Nosotros 2" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="nosotros3.jpg" alt="Nosotros 3" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="nosotros4.jpg" alt="Nosotros 4" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="nosotros5.jpg" alt="Nosotros 5" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="nosotros6.jpg" alt="Nosotros 6" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="nosotros7.jpg" alt="Nosotros 7" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="nosotros8.jpg" alt="Nosotros 8" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="nosotros9.jpg" alt="Nosotros 9" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="nosotros10.jpg" alt="Nosotros 10" loading="lazy" onclick="abrirModal(this.src)">
+                    </div>
+                    <button class="carousel-btn btn-prev" onclick="moverCarrusel('slider-nosotros', -1)">❮</button>
+                    <button class="carousel-btn btn-next" onclick="moverCarrusel('slider-nosotros', 1)">❯</button>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Arte Botánico</h3>
+                    <p class="card-desc">En Solaz, cada flor es seleccionada con amor. Somos artesanos florales en el corazón de La Plata, dedicados a transformar tus sentimientos en diseño de alta calidad.</p>
+                </div>
+            </article>
+        </div>
+
+        <h2 id="clientes" class="section-title">Nuestros Clientes</h2>
+        <div class="catalog no-price">
+            <article class="card">
+                <div class="carousel-container">
+                    <div class="carousel-images" id="slider-clientes" data-index="0">
+                        <img src="cliente1.jpg" alt="Cliente 1" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="cliente2.jpg" alt="Cliente 2" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="cliente3.jpg" alt="Cliente 3" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="cliente4.jpg" alt="Cliente 4" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="cliente5.jpg" alt="Cliente 5" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="cliente6.jpg" alt="Cliente 6" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="cliente7.jpg" alt="Cliente 7" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="cliente8.jpg" alt="Cliente 8" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="cliente9.jpg" alt="Cliente 9" loading="lazy" onclick="abrirModal(this.src)">
+                        <img src="cliente10.jpg" alt="Cliente 10" loading="lazy" onclick="abrirModal(this.src)">
+                    </div>
+                    <button class="carousel-btn btn-prev" onclick="moverCarrusel('slider-clientes', -1)">❮</button>
+                    <button class="carousel-btn btn-next" onclick="moverCarrusel('slider-clientes', 1)">❯</button>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Momentos Inolvidables</h3>
+                    <p class="card-desc">Gracias por dejarnos ser parte de sus celebraciones más importantes. ¡Sus sonrisas son nuestro mejor arreglo!</p>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 Solaz Florería Botánica. Todos los derechos reservados.</p>
+    </footer>
+
+    <div id="imageModal" class="modal" onclick="cerrarModal()">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="imgAmpliada">
+    </div>
+
+    <script>
+        function moverCarrusel(id, direccion) {
+            const slider = document.getElementById(id);
+            if(!slider) return;
+            const totalImagenes = slider.children.length;
+            let index = parseInt(slider.getAttribute('data-index'));
+
+            index += direccion;
+            if (index < 0) index = totalImagenes - 1;
+            if (index >= totalImagenes) index = 0;
+
+            slider.setAttribute('data-index', index);
+            slider.style.transform = `translateX(-${index * 100}%)`;
+        }
+       
+        function comprar(nombreArreglo) {
+            const numeroWhatsApp = "5492216261966"; 
+            const mensaje = `Hola, me comunico con Solaz Florería. Me interesa adquirir: "${nombreArreglo}". ¿Tienen disponibilidad?`;
+            const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+
+        function sugerirPrecio(nombreRegalo, inputId) {
+            const presupuesto = document.getElementById(inputId).value;
+            if(!presupuesto || presupuesto <= 0) {
+                alert("Por favor, ingresa un monto sugerido válido antes de enviar.");
+                return;
+            }
+            const numeroWhatsApp = "5492216261966";
+            const mensaje = `Hola, me comunico con Solaz Florería. Me interesa la "${nombreRegalo}" y cuento con un presupuesto de $${presupuesto}. ¿Podrían asesorarme?`;
+            const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+
+        function abrirModal(src) {
+            const modal = document.getElementById("imageModal");
+            const imgAmpliada = document.getElementById("imgAmpliada");
+            modal.style.display = "flex";
+            imgAmpliada.src = src;
+        }
+
+        function cerrarModal() {
+            document.getElementById("imageModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>
